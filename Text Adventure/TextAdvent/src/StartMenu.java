@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
-public class StartMenu {
-    
+public class StartMenu extends JFrame{
+
+    public StartMenu
 }
