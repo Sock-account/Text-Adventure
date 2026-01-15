@@ -2,13 +2,13 @@ import javax.swing.*;
 import java.awt.*;
 public class Window extends JFrame {
     
-    @SuppressWarnings("derprecation")
+    @SuppressWarnings("deprecation")
     public Window(){
         JPanel window = new JPanel();
         JPanel Start = new JPanel();
         JPanel Game = new JPanel();
 
-        JLabel Title = new JLabel("Text Adventure");
+        JLabel Title = new JLabel("The Game of Life");
 
         Start.add(Title);
         window.add(Start);
