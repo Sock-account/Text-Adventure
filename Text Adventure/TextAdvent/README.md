@@ -1,1 +1,2 @@
-
+I want to make a text adventure that takes place over the lifetime of a created character. A character should include the characters name, gender, stats, and quirks.
+depending on the choices made by the player and the character's info the events of the character's life can vary. 
