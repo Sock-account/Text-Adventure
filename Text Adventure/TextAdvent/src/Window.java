@@ -27,7 +27,7 @@ public class Window extends JFrame {
             start.remove(start_button_space);
             start.remove(Title);
             repaint();
-            Chara_Creator();
+            Chara_Creator(window);
         });
 
 
@@ -42,7 +42,32 @@ public class Window extends JFrame {
         this.setTitle("Text Adventure");
     }
 
-    public void Chara_Creator(){
+    public void Chara_Creator(JPanel window){
+        //This should display the character creation screen
+        JPanel chara_creator = new JPanel();
+        
+        //This is the panel for the character's name
+        JPanel chara_name_panel = new JPanel();
+        JTextField chara_name = new JTextField(20);
+        JLabel name_label = new JLabel("Name");
+        chara_name_panel.add(chara_name);
+        chara_name_panel.add(name_label);
+        chara_creator.add(chara_name_panel);
+        
+        //This is the panel for the character's age
+        JPanel age_space = new JPanel();
+        JTextField age_box = new JTextField(2);
+        JLabel age_label = new JLabel("Age");
+        age_space.add(age_box);
+        age_space.add(age_label);
+        chara_creator.add(age_space);
+
+        
+        
+        window.add(chara_creator);
+        window.revalidate();
+        window.repaint();
+
         
     }
 }
