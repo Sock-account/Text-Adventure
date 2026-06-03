@@ -63,11 +63,19 @@ public class Window extends JFrame {
         chara_creator.add(age_space);
 
         
-        
+        //The following will be the panels for the buttons 
+        // and labels for the attributes
+
+        // Strength panel
+        JPanel strength_spacel = new JPanel();
+        JLabel strength_label = new JLabel("Strength");
+        JLabel strength_num = new JLabel("0");
+        JButton strength_b1 = new JButton("<-");
+        JButton strength_b2 = new JButton("->");
         window.add(chara_creator);
         window.revalidate();
         window.repaint();
 
-        
+        chara_creator.setLayout(new GridLayout());
     }
 }
