@@ -67,15 +67,24 @@ public class Window extends JFrame {
         // and labels for the attributes
 
         // Strength panel
-        JPanel strength_spacel = new JPanel();
+        JPanel strength_space = new JPanel();
         JLabel strength_label = new JLabel("Strength");
         JLabel strength_num = new JLabel("0");
         JButton strength_b1 = new JButton("<-");
         JButton strength_b2 = new JButton("->");
+
+        strength_space.add(strength_label);
+        strength_space.add(strength_b1);
+        strength_space.add(strength_num);
+        strength_space.add(strength_b2);
+
+        chara_creator.add(strength_space);
+        // Intelligence panel
+        
         window.add(chara_creator);
         window.revalidate();
         window.repaint();
 
-        chara_creator.setLayout(new GridLayout());
+        chara_creator.setLayout(new FlowLayout());
     }
 }
