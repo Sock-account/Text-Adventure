@@ -8,13 +8,13 @@ public class Window extends JFrame {
     public Window(){
         JPanel window = new JPanel();
         JPanel start = new JPanel();
-        JPanel Game = new JPanel();
+        Frame Game = new JFrame();
         
         JLabel Title = new JLabel("The Game of Life");
 
         start.add(Title);
         window.add(start);
-        
+        Game.add(window);
 
         // Sets up the logic for the start screen
         JPanel start_button_space = new JPanel();
@@ -33,10 +33,10 @@ public class Window extends JFrame {
 
 
 
-
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.getContentPane().add(window);
-        window.setLayout(new FlowLayout());
+        Game.setLayout(new FlowLayout());
+        Game.pack();
         this.setSize(new Dimension(500,500));
         this.setVisible(true);
         this.setTitle("Text Adventure");
@@ -70,8 +70,8 @@ public class Window extends JFrame {
         JPanel strength_space = new JPanel();
         JLabel strength_label = new JLabel("Strength");
         JLabel strength_num = new JLabel("0");
-        JButton strength_b1 = new JButton("<-");
-        JButton strength_b2 = new JButton("->");
+        JButton strength_b1 = new JButton("<");
+        JButton strength_b2 = new JButton(">");
 
         strength_space.add(strength_label);
         strength_space.add(strength_b1);
@@ -80,6 +80,45 @@ public class Window extends JFrame {
 
         chara_creator.add(strength_space);
         // Intelligence panel
+        JPanel int_space = new JPanel();
+        JLabel int_label = new JLabel("Intelligence");
+        JLabel int_num = new JLabel("0");
+        JButton int_b1 = new JButton("<");
+        JButton int_b2 = new JButton(">");
+
+        int_space.add(int_label);
+        int_space.add(int_b1);
+        int_space.add(int_num);
+        int_space.add(int_b2);
+        chara_creator.add(int_space);
+        //Charisma panel
+        JPanel charisma_space = new JPanel();
+        JLabel charisma_label = new JLabel("Charisma");
+        JLabel charisma_num = new JLabel("0");
+        JButton charisma_b1 = new JButton("<");
+        JButton charisma_b2 = new JButton(">");
+
+        charisma_space.add(charisma_label);
+        charisma_space.add(charisma_b1);
+        charisma_space.add(charisma_num);
+        charisma_space.add(charisma_b2);
+        chara_creator.add(charisma_space);
+        //Coordination panel
+        JPanel coordination_space = new JPanel();
+        JLabel coordination_label = new JLabel("Coordination");
+        JLabel coordination_num = new JLabel("0");
+        JButton coordination_b1 = new JButton("<");
+        JButton coordination_b2 = new JButton(">");
+
+        coordination_space.add(coordination_label);
+        coordination_space.add(coordination_b1);
+        coordination_space.add(coordination_num);
+        coordination_space.add(coordination_b2);
+        chara_creator.add(coordination_space);
+        //Quirks panel
+        JPanel quirk_panel = new JPanel();
+        JButton quirk_b1 = new JButton("Asmatic");
+        JButton quirk_b2 = new JButton("Autistic");
         
         window.add(chara_creator);
         window.revalidate();
