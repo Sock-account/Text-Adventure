@@ -117,12 +117,12 @@ public class Window extends JFrame {
         //Quirks panel
         JPanel quirk_panel = new JPanel();
         JLabel quirk_name = new JLabel("Quirks");
-        JButton quirk_b1 = new JButton("");
-        JButton quirk_b2 = new JButton("");
-        JButton quirk_b3 = new JButton("");
-        JButton quirk_b4 = new JButton("");
-        JButton quirk_b5 = new JButton("");
-        JButton quirk_b6 = new JButton("");
+        JButton quirk_b1 = new JButton("Savant");
+        JButton quirk_b2 = new JButton("Imbecile");
+        JButton quirk_b3 = new JButton("Passivist");
+        JButton quirk_b4 = new JButton("Socially inept");
+        JButton quirk_b5 = new JButton("Sadist");
+        JButton quirk_b6 = new JButton("Weird");
         quirk_panel.add(quirk_name);
         quirk_panel.add(quirk_b1);
         quirk_panel.add(quirk_b2);
