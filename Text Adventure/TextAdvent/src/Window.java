@@ -131,6 +131,9 @@ public class Window extends JFrame {
         quirk_panel.add(quirk_b5);
         quirk_panel.add(quirk_b6);
         chara_creator.add(quirk_panel);
+
+
+        //Changes values on click 
         window.add(chara_creator);
         window.revalidate();
         window.repaint();
