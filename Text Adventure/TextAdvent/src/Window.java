@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
 public class Window extends JFrame {
     
     //TODO:Figure out how to change the elements in the window dynamically 
@@ -137,8 +138,22 @@ public class Window extends JFrame {
         chara_creator.add(create_char);
     //TODO: Make the status buttons change the displayed numbers and once the create character button is pushed it creates a new character object
 
+    //These variables will be assigned values and be passed to the character constructor when the create character button is pushed
+    String name;
+    int age = 0; 
+    int char_strength = 0;
+    int intelligence = 0;
+    int charisma = 0;
+    int coordination = 0;
+    HashMap<String,Integer> status = new HashMap<>();
+    String[] quirks = new String[2];
             //Changes values on click
-            
+            strength_b1.addActionListener(e -> {
+                if(Integer.parseInt(strength_label.getText()) > 0) {
+                strength_label.setText(String.valueOf(Integer.parseInt(strength_num.getText()) - 1));
+                //char_strength = char_strength - 1;
+                }
+            });
         window.add(chara_creator);
         window.revalidate();
         window.repaint();
