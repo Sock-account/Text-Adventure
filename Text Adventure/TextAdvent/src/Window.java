@@ -132,9 +132,13 @@ public class Window extends JFrame {
         quirk_panel.add(quirk_b6);
         chara_creator.add(quirk_panel);
 
+        //Create character button
+        JButton create_char = new JButton("Create Character");
+        chara_creator.add(create_char);
     //TODO: Make the status buttons change the displayed numbers and once the create character button is pushed it creates a new character object
 
-        //Changes values on click 
+            //Changes values on click
+            
         window.add(chara_creator);
         window.revalidate();
         window.repaint();
