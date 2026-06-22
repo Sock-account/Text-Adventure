@@ -139,25 +139,77 @@ public class Window extends JFrame {
     //TODO: Make the status buttons change the displayed numbers and once the create character button is pushed it creates a new character object
 
     //These variables will be assigned values and be passed to the character constructor when the create character button is pushed
-    String name;
-    int age = 0; 
-    int char_strength = 0;
-    int intelligence = 0;
-    int charisma = 0;
-    int coordination = 0;
-    HashMap<String,Integer> status = new HashMap<>();
-    String[] quirks = new String[2];
+    // String name;
+    // int age = 0; 
+    // Integer chara_strength = 0;
+    // int intelligence = 0;
+    // int charisma = 0;
+    // int coordination = 0;
+    // HashMap<String,Integer> status = new HashMap<>();
+    // String[] quirks = new String[2];
             //Changes values on click
             strength_b1.addActionListener(e -> {
-                if(Integer.parseInt(strength_label.getText()) > 0) {
-                strength_label.setText(String.valueOf(Integer.parseInt(strength_num.getText()) - 1));
-                //char_strength = char_strength - 1;
+                if(Integer.parseInt(strength_num.getText()) > 0) {
+                strength_num.setText(String.valueOf(Integer.parseInt(strength_num.getText()) - 1));
+                
                 }
             });
+            strength_b2.addActionListener(e -> {
+                if(Integer.parseInt(strength_num.getText()) < 10) {
+                    strength_num.setText(String.valueOf(Integer.parseInt(strength_num.getText()) + 1));
+                }
+            });
+            int_b1.addActionListener(e -> {
+                if(Integer.parseInt(int_num.getText()) > 0) {
+                    int_num.setText(String.valueOf(Integer.parseInt(int_num.getText()) - 1));
+                }
+            });
+            int_b2.addActionListener(e -> {
+                if(Integer.parseInt(int_num.getText()) < 10) {
+                    int_num.setText(String.valueOf(Integer.parseInt(int_num.getText()) + 1));
+                }
+            });
+            charisma_b1.addActionListener(e -> {
+                if(Integer.parseInt(charisma_num.getText()) > 0) {
+                    charisma_num.setText(String.valueOf(Integer.parseInt(charisma_num.getText()) - 1));
+                }
+            });
+            charisma_b2.addActionListener(e -> {
+                if(Integer.parseInt(charisma_num.getText()) < 10) {
+                    charisma_num.setText(String.valueOf(Integer.parseInt(charisma_num.getText()) + 1));
+                }
+            });
+            coordination_b1.addActionListener(e -> {
+                if(Integer.parseInt(coordination_num.getText()) > 0) {
+                    coordination_num.setText(String.valueOf(Integer.parseInt(coordination_num.getText()) - 1));
+                }
+            });
+            coordination_b2.addActionListener(e -> {
+                if(Integer.parseInt(coordination_num.getText()) < 10) {
+                    coordination_num.setText(String.valueOf(Integer.parseInt(coordination_num.getText()) + 1));
+                }
+            });
+            
+
+            //This Button creates the player character object
+            create_char.addActionListener( e -> {
+            String name = chara_name.getText(); 
+                int strength = Integer.parseInt(strength_num.getText()) ;
+                int intelligence = Integer.parseInt(int_num.getText());
+                int charisma = Integer.parseInt(charisma_num.getText());
+                int coordination = Integer.parseInt(coordination_num.getText());
+                Character player = createCharacter(name, strength, intelligence, charisma, coordination);
+    });
+
+            
         window.add(chara_creator);
         window.revalidate();
         window.repaint();
 
         chara_creator.setLayout(new GridLayout(6, 3));
     }
+    public Character createCharacter(String name, int strength, int intelligence, int charisma, int coordination) {
+                Character player = new Character(name, strength, intelligence, charisma, coordination);
+        return player;
+            }
 }
