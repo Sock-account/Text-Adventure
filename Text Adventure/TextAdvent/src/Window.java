@@ -64,8 +64,7 @@ public class Window extends JFrame {
         chara_creator.add(age_space);
 
         
-        //The following will be the panels for the buttons 
-        // and labels for the attributes
+        //The following will be the panels for the buttons and labels for the attributes
 
         // Strength panel
         JPanel strength_space = new JPanel();
