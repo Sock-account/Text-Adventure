@@ -115,7 +115,7 @@ public class Window extends JFrame {
         chara_creator.add(coordination_space);
         
         //Quirks panel
-        JPanel quirk_panel = new JPanel();
+        /*JPanel quirk_panel = new JPanel();
         JLabel quirk_name = new JLabel("Quirks");
         JButton quirk_b1 = new JButton("Savant");
         JButton quirk_b2 = new JButton("Imbecile");
@@ -130,7 +130,7 @@ public class Window extends JFrame {
         quirk_panel.add(quirk_b4);
         quirk_panel.add(quirk_b5);
         quirk_panel.add(quirk_b6);
-        chara_creator.add(quirk_panel);
+        chara_creator.add(quirk_panel);*/
 
         //Create character button
         JButton create_char = new JButton("Create Character");
@@ -198,6 +198,9 @@ public class Window extends JFrame {
                 int charisma = Integer.parseInt(charisma_num.getText());
                 int coordination = Integer.parseInt(coordination_num.getText());
                 Character player = createCharacter(name, strength, intelligence, charisma, coordination);
+                window.remove(chara_creator);
+                Quirkwin(window, player);
+
     });
 
             
@@ -207,6 +210,147 @@ public class Window extends JFrame {
 
         chara_creator.setLayout(new GridLayout(6, 3));
     }
+    
+    
+    
+    //This method displays the quirks window and creates and passes the hashmap for quirks to the SetQuirks method in Character
+    public void Quirkwin(JPanel window, Character player) {
+        JPanel quirkscreen = new JPanel();
+
+        //Quirks panel
+        JPanel quirk_panel = new JPanel();
+        JLabel quirk_name = new JLabel("Quirks");
+        JButton quirk_b1 = new JButton("Savant");
+        JButton quirk_b2 = new JButton("Imbecile");
+        JButton quirk_b3 = new JButton("Passivist");
+        JButton quirk_b4 = new JButton("Socially inept");
+        JButton quirk_b5 = new JButton("Sadist");
+        JButton quirk_b6 = new JButton("Weird");
+        JPanel submit_space = new JPanel();
+        JButton submitButton = new JButton("Submit");
+        submit_space.add(submitButton);
+        quirk_panel.add(quirk_name);
+        quirk_panel.add(quirk_b1);
+        quirk_panel.add(quirk_b2);
+        quirk_panel.add(quirk_b3);
+        quirk_panel.add(quirk_b4);
+        quirk_panel.add(quirk_b5);
+        quirk_panel.add(quirk_b6);
+        quirk_panel.add(submitButton);
+        quirk_panel.add(submit_space);
+        quirkscreen.add(quirk_panel);
+
+        quirk_b1.addActionListener(e -> {
+            if(!quirk_b1.getBackground().equals(Color.LIGHT_GRAY)) {
+            quirk_b1.setBackground(Color.GREEN);
+            }else if(quirk_b1.getBackground().equals(Color.GREEN)) {
+            quirk_b1.setBackground(Color.LIGHT_GRAY);
+            }
+        });
+        quirk_b2.addActionListener(e -> {
+            if(!quirk_b2.getBackground().equals(Color.GREEN)) {
+            quirk_b2.setBackground(Color.GREEN);
+            }else if(quirk_b2.getBackground().equals(Color.GREEN)) {
+            quirk_b2.setBackground(Color.LIGHT_GRAY);
+            }
+        });
+        quirk_b3.addActionListener(e -> {
+            if(!quirk_b3.getBackground().equals(Color.GREEN)) {
+            quirk_b3.setBackground(Color.GREEN);
+            }else if(quirk_b3.getBackground().equals(Color.GREEN)) {
+            quirk_b3.setBackground(Color.LIGHT_GRAY);
+            }
+        });
+        quirk_b4.addActionListener(e -> {
+            if(!quirk_b4.getBackground().equals(Color.GREEN)) {
+            quirk_b4.setBackground(Color.GREEN);
+            }else if(quirk_b4.getBackground().equals(Color.GREEN)) {
+            quirk_b4.setBackground(Color.LIGHT_GRAY);
+            }
+        });
+        quirk_b5.addActionListener(e -> {
+            if(!quirk_b5.getBackground().equals(Color.GREEN)) {
+            quirk_b5.setBackground(Color.GREEN);
+            }else if(quirk_b5.getBackground().equals(Color.GREEN)) {
+            quirk_b5.setBackground(Color.LIGHT_GRAY);
+            }
+        });
+        quirk_b6.addActionListener(e -> {
+            if(!quirk_b6.getBackground().equals(Color.GREEN)) {
+            quirk_b6.setBackground(Color.GREEN);
+            }else if(quirk_b6.getBackground().equals(Color.GREEN)) {
+            quirk_b6.setBackground(Color.LIGHT_GRAY);
+            }
+        });
+
+        HashMap<Integer,Integer> quirks = new HashMap<>();
+        
+        submitButton.addActionListener(e -> {
+            if (quirk_b1.getBackground().equals(Color.GREEN)) {
+                int q1 = quirk_b1.getText().hashCode();
+                quirks.put(q1, 1);
+            }
+            else {
+                int q1 = quirk_b1.getText().hashCode();
+                quirks.put(q1, 0);
+            }
+            if (quirk_b2.getBackground().equals(Color.GREEN)) {
+                int q2 = quirk_b2.getText().hashCode();
+                quirks.put(q2, 1);
+            }
+            else {
+                int q2 = quirk_b2.getText().hashCode();
+                quirks.put(q2, 0);
+            }
+            if (quirk_b3.getBackground().equals(Color.GREEN)) {
+                int q3 = quirk_b3.getText().hashCode();
+                quirks.put(q3, 1);
+            }
+            else {
+                int q3 = quirk_b3.getText().hashCode();
+                quirks.put(q3, 0);
+            }
+            if (quirk_b4.getBackground().equals(Color.GREEN)) {
+                int q4 = quirk_b4.getText().hashCode();
+                quirks.put(q4, 1);
+            }
+            else {
+                int q4 = quirk_b4.getText().hashCode();
+                quirks.put(q4, 0);
+            }
+            if (quirk_b5.getBackground().equals(Color.GREEN)) {
+                int q5 = quirk_b5.getText().hashCode();
+                quirks.put(q5, 1);
+            }
+            else {
+                int q5 = quirk_b5.getText().hashCode();
+                quirks.put(q5, 0);
+            }
+            if (quirk_b6.getBackground().equals(Color.GREEN)) {
+                int q6 = quirk_b6.getText().hashCode();
+                quirks.put(q6, 1);
+            }
+            else {
+                int q6 = quirk_b6.getText().hashCode();
+                quirks.put(q6, 0);
+            }
+            player.setQuirks(quirks);
+        });
+        
+
+        
+
+        quirkscreen.setLayout(new GridLayout(3, 3));
+        window.add(quirkscreen);
+        window.revalidate();
+        window.repaint();
+    }
+    
+    
+    
+    
+    
+    
     public Character createCharacter(String name, int strength, int intelligence, int charisma, int coordination) {
                 Character player = new Character(name, strength, intelligence, charisma, coordination);
         return player;

@@ -8,7 +8,7 @@ public class Character {
     private int charisma;
     private int coordination;
     //Status refer to status effects that the player character can acrew over the course of play 
-    //private HashMap<String,Integer> status = new HashMap<>();
+    private HashMap<Integer,Integer> quirks = new HashMap<>();
     //private String[] quirks = new String[2];
 
 public Character(String name,int strength, int intelligence, int charisma, int coordination){
@@ -21,5 +21,7 @@ public Character(String name,int strength, int intelligence, int charisma, int c
     //this.status = status;
     //this.quirks = quirks;
 }
-
+public void setQuirks(HashMap<Integer,Integer> quirks) {
+    this.quirks = quirks;
+}
 }
