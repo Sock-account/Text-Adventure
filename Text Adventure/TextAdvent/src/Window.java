@@ -36,7 +36,7 @@ public class Window extends JFrame {
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.getContentPane().add(window);
-        Game.setLayout(new FlowLayout());
+        Game.setLayout(new GridLayout(4, 4));
         Game.pack();
         this.setSize(new Dimension(500,500));
         this.setVisible(true);
@@ -54,15 +54,6 @@ public class Window extends JFrame {
         chara_name_panel.add(chara_name);
         chara_name_panel.add(name_label);
         chara_creator.add(chara_name_panel);
-        
-        //This is the panel for the character's age
-        JPanel age_space = new JPanel();
-        JTextField age_box = new JTextField(2);
-        JLabel age_label = new JLabel("Age");
-        age_space.add(age_box);
-        age_space.add(age_label);
-        chara_creator.add(age_space);
-
         
         //The following will be the panels for the buttons and labels for the attributes
 
@@ -147,6 +138,7 @@ public class Window extends JFrame {
     // HashMap<String,Integer> status = new HashMap<>();
     // String[] quirks = new String[2];
             //Changes values on click
+
             strength_b1.addActionListener(e -> {
                 if(Integer.parseInt(strength_num.getText()) > 0) {
                 strength_num.setText(String.valueOf(Integer.parseInt(strength_num.getText()) - 1));
@@ -241,7 +233,7 @@ public class Window extends JFrame {
         quirkscreen.add(quirk_panel);
 
         quirk_b1.addActionListener(e -> {
-            if(!quirk_b1.getBackground().equals(Color.LIGHT_GRAY)) {
+            if(!quirk_b1.getBackground().equals(Color.GREEN)) {
             quirk_b1.setBackground(Color.GREEN);
             }else if(quirk_b1.getBackground().equals(Color.GREEN)) {
             quirk_b1.setBackground(Color.LIGHT_GRAY);
