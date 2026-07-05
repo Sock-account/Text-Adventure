@@ -327,6 +327,8 @@ public class Window extends JFrame {
                 quirks.put(q6, 0);
             }
             player.setQuirks(quirks);
+            
+            Game_start(player, window);
         });
         
 
@@ -338,7 +340,9 @@ public class Window extends JFrame {
         window.repaint();
     }
     
-    
+    public static void Game_start(Character player, JPanel window){
+        
+    }
     
     
     
