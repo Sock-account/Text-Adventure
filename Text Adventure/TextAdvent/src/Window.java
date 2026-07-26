@@ -1,60 +1,63 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.HashMap;
 public class Window extends JFrame {
     
-    //TODO:Figure out how to change the elements in the window dynamically 
-    @SuppressWarnings("deprecation")
     // Creates the GUI for the game
     public Window(){
-        JPanel window = new JPanel();
-        JPanel start = new JPanel();
-        Frame Game = new JFrame();
-        
-        JLabel Title = new JLabel("The Game of Life");
+        //BorderLayout is what makes the screens scale: whatever sits in CENTER
+        //is stretched to fill the frame instead of staying at its preferred size
+        JPanel window = new JPanel(new BorderLayout());
+        JPanel start = new JPanel(new GridBagLayout());
 
-        start.add(Title);
-        window.add(start);
-        Game.add(window);
+        JLabel Title = new JLabel("Sand Pit");
+        Title.setFont(Title.getFont().deriveFont(Font.BOLD, 28f));
 
         // Sets up the logic for the start screen
-        JPanel start_button_space = new JPanel();
-        JButton sb = new JButton();
-        JLabel l1 = new JLabel("Start");
-        sb.add(l1);
-        start_button_space.add(sb);
-        start.add(start_button_space);
+        JButton sb = new JButton("Start");
+
+        //A single GridBag column keeps the title and button centred at any window size
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        start.add(Title, gbc);
+        start.add(sb, gbc);
+
+        window.add(start, BorderLayout.CENTER);
+
         sb.addActionListener(q ->{
-            start.remove(start_button_space);
-            start.remove(Title);
-            repaint();
+            window.remove(start);
             Chara_Creator(window);
         });
 
-
-
-
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.getContentPane().add(window);
-        Game.setLayout(new GridLayout(4, 4));
-        Game.pack();
-        this.setSize(new Dimension(500,500));
+        this.setTitle("Sand Pit");
+        this.setSize(new Dimension(600, 500));
+        this.setMinimumSize(new Dimension(380, 340));
+        this.setLocationRelativeTo(null);
         this.setVisible(true);
-        this.setTitle("Text Adventure");
     }
 
     public void Chara_Creator(JPanel window){
         //This should display the character creation screen
-        JPanel chara_creator = new JPanel();
-        
+        //The name row and the create button keep their natural height at the top and
+        //bottom, while stat_rows takes the space left over and splits it evenly.
+        //GridLayout(0, 1) is one column with as many rows as there are stats.
+        JPanel chara_creator = new JPanel(new BorderLayout());
+        JPanel stat_rows = new JPanel(new GridLayout(0, 1));
+        chara_creator.add(stat_rows, BorderLayout.CENTER);
+
         //This is the panel for the character's name
         JPanel chara_name_panel = new JPanel();
         JTextField chara_name = new JTextField(20);
         JLabel name_label = new JLabel("Name");
         chara_name_panel.add(chara_name);
         chara_name_panel.add(name_label);
-        chara_creator.add(chara_name_panel);
-        
+        chara_creator.add(chara_name_panel, BorderLayout.NORTH);
+
         //The following will be the panels for the buttons and labels for the attributes
 
         // Strength panel
@@ -67,7 +70,7 @@ public class Window extends JFrame {
         strength_space.add(strength_b1);
         strength_space.add(strength_num);
         strength_space.add(strength_b2);
-        chara_creator.add(strength_space);
+        stat_rows.add(strength_space);
         
         // Intelligence panel
         JPanel int_space = new JPanel();
@@ -79,7 +82,7 @@ public class Window extends JFrame {
         int_space.add(int_b1);
         int_space.add(int_num);
         int_space.add(int_b2);
-        chara_creator.add(int_space);
+        stat_rows.add(int_space);
         
         //Charisma panel
         JPanel charisma_space = new JPanel();
@@ -91,7 +94,7 @@ public class Window extends JFrame {
         charisma_space.add(charisma_b1);
         charisma_space.add(charisma_num);
         charisma_space.add(charisma_b2);
-        chara_creator.add(charisma_space);
+        stat_rows.add(charisma_space);
 
         //Coordination panel
         JPanel coordination_space = new JPanel();
@@ -103,7 +106,7 @@ public class Window extends JFrame {
         coordination_space.add(coordination_b1);
         coordination_space.add(coordination_num);
         coordination_space.add(coordination_b2);
-        chara_creator.add(coordination_space);
+        stat_rows.add(coordination_space);
         
         //Quirks panel
         /*JPanel quirk_panel = new JPanel();
@@ -123,9 +126,13 @@ public class Window extends JFrame {
         quirk_panel.add(quirk_b6);
         chara_creator.add(quirk_panel);*/
 
-        //Create character button
+        //Create character button. Wrapping it in a FlowLayout panel before putting that
+        //panel in SOUTH is what keeps the button at its own size - a button added to a
+        //BorderLayout region directly gets stretched to fill that whole region.
+        JPanel create_space = new JPanel();
         JButton create_char = new JButton("Create Character");
-        chara_creator.add(create_char);
+        create_space.add(create_char);
+        chara_creator.add(create_space, BorderLayout.SOUTH);
     //TODO: Make the status buttons change the displayed numbers and once the create character button is pushed it creates a new character object
 
     //These variables will be assigned values and be passed to the character constructor when the create character button is pushed
@@ -196,22 +203,21 @@ public class Window extends JFrame {
     });
 
             
-        window.add(chara_creator);
+        window.add(chara_creator, BorderLayout.CENTER);
         window.revalidate();
         window.repaint();
-
-        chara_creator.setLayout(new GridLayout(6, 3));
     }
     
     
     
     //This method displays the quirks window and creates and passes the hashmap for quirks to the SetQuirks method in Character
     public void Quirkwin(JPanel window, Character player) {
-        JPanel quirkscreen = new JPanel();
+        JPanel quirkscreen = new JPanel(new BorderLayout());
 
-        //Quirks panel
-        JPanel quirk_panel = new JPanel();
-        JLabel quirk_name = new JLabel("Quirks");
+        //Quirks panel: the heading and submit button keep their natural height at the
+        //top and bottom, while the grid of quirk buttons takes all the space left over
+        JPanel quirk_panel = new JPanel(new GridLayout(0, 2, 6, 6));
+        JLabel quirk_name = new JLabel("Quirks", SwingConstants.CENTER);
         JButton quirk_b1 = new JButton("Savant");
         JButton quirk_b2 = new JButton("Imbecile");
         JButton quirk_b3 = new JButton("Passivist");
@@ -221,16 +227,15 @@ public class Window extends JFrame {
         JPanel submit_space = new JPanel();
         JButton submitButton = new JButton("Submit");
         submit_space.add(submitButton);
-        quirk_panel.add(quirk_name);
         quirk_panel.add(quirk_b1);
         quirk_panel.add(quirk_b2);
         quirk_panel.add(quirk_b3);
         quirk_panel.add(quirk_b4);
         quirk_panel.add(quirk_b5);
         quirk_panel.add(quirk_b6);
-        quirk_panel.add(submitButton);
-        quirk_panel.add(submit_space);
-        quirkscreen.add(quirk_panel);
+        quirkscreen.add(quirk_name, BorderLayout.NORTH);
+        quirkscreen.add(quirk_panel, BorderLayout.CENTER);
+        quirkscreen.add(submit_space, BorderLayout.SOUTH);
 
         quirk_b1.addActionListener(e -> {
             if(!quirk_b1.getBackground().equals(Color.GREEN)) {
@@ -327,21 +332,70 @@ public class Window extends JFrame {
                 quirks.put(q6, 0);
             }
             player.setQuirks(quirks);
-            
+
+            window.remove(quirkscreen);
             Game_start(player, window);
         });
         
 
         
 
-        quirkscreen.setLayout(new GridLayout(3, 3));
-        window.add(quirkscreen);
+        window.add(quirkscreen, BorderLayout.CENTER);
         window.revalidate();
         window.repaint();
     }
     
+    //This method builds the main game screen and types out the opening text
     public static void Game_start(Character player, JPanel window){
-        
+        JPanel gamescreen = new JPanel(new BorderLayout());
+
+        JTextArea story = new JTextArea(10, 34);
+        story.setEditable(false);
+        story.setLineWrap(true);
+        story.setWrapStyleWord(true);
+        story.setFont(new Font("Monospaced", Font.PLAIN, 14));
+        story.setBackground(Color.BLACK);
+        story.setForeground(Color.GREEN);
+        story.setMargin(new Insets(8, 8, 8, 8));
+        gamescreen.add(new JScrollPane(story), BorderLayout.CENTER);
+
+        window.add(gamescreen, BorderLayout.CENTER);
+        window.revalidate();
+        window.repaint();
+
+        String opening = "You wake to a impregnable darkness.";
+
+        typeText(story, opening, 35);
+    }
+
+    //Reveals text one character at a time so it reads like it is being typed out.
+    //Clicking the text area skips ahead to the finished message.
+    public static void typeText(JTextArea area, String text, int delayMs) {
+        //Held in an array so the listeners below can update the position as they run
+        int[] index = {0};
+        javax.swing.Timer typer = new javax.swing.Timer(delayMs, null);
+
+        typer.addActionListener(e -> {
+            area.append(String.valueOf(text.charAt(index[0])));
+            index[0]++;
+            if (index[0] >= text.length()) {
+                typer.stop();
+            }
+        });
+
+        area.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (typer.isRunning()) {
+                    typer.stop();
+                    area.append(text.substring(index[0]));
+                    index[0] = text.length();
+                }
+                area.removeMouseListener(this);
+            }
+        });
+
+        typer.start();
     }
     
     

@@ -25,4 +25,7 @@ public Character(String name,int strength, int intelligence, int charisma, int c
 public void setQuirks(HashMap<Integer,Integer> quirks) {
     this.quirks = quirks;
 }
+public String getName() {
+    return name;
+}
 }
