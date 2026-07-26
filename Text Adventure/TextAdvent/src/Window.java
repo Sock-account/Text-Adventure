@@ -397,7 +397,7 @@ public class Window extends JFrame {
         String opening = "You wake to a impregnable darkness. Cloaked in an all encompassing warmth. You want to sleep but I strange groan is heard." +
         "You try to close your eyes but the groaning grows louder.";
 
-        String[] opening_options = {"Open your eyes.", "Stay still and listen.", "Call out."};
+        String[] opening_options = {"Open your eyes.", "I want to stay in the dark.", "Call out."};
 
         //The options are only shown once the opening has finished typing, so the player
         //isn't offered a choice partway through a sentence.
@@ -406,6 +406,13 @@ public class Window extends JFrame {
             //back into the story so the wiring is visible end to end.
             setOptions(options_panel, new String[0], null);
             typeText(story, "\n\n> " + opening_options[choice] + "\n", 35);
+            if (choice == 0) {
+                String scene1 = "You see a sudden flash of light. A sharp sting fill your lungs. A chilling cold assaults your skin.";
+            } else if (choice == 1) {
+                // Handle choice 1
+            } else if (choice == 2) {
+                // Handle choice 2
+            }
         }));
     }
 
