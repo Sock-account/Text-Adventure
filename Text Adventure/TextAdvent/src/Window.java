@@ -3,8 +3,15 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
+import java.util.function.IntConsumer;
 public class Window extends JFrame {
-    
+
+    //The game screen's terminal look. Kept in one place so the story area and the dialogue
+    //buttons are styled from the same values and cannot drift apart later
+    private static final Font TERMINAL_FONT = new Font("Monospaced", Font.PLAIN, 14);
+    private static final Color TERMINAL_BG = Color.BLACK;
+    private static final Color TERMINAL_FG = Color.GREEN;
+
     // Creates the GUI for the game
     public Window(){
         //BorderLayout is what makes the screens scale: whatever sits in CENTER
@@ -215,8 +222,13 @@ public class Window extends JFrame {
         JPanel quirkscreen = new JPanel(new BorderLayout());
 
         //Quirks panel: the heading and submit button keep their natural height at the
-        //top and bottom, while the grid of quirk buttons takes all the space left over
-        JPanel quirk_panel = new JPanel(new GridLayout(0, 2, 6, 6));
+        //top and bottom, while the grid of quirk buttons takes all the space left over.
+        //GridLayout stretches every child to fill its cell and ignores setPreferredSize,
+        //so the buttons are shrunk indirectly: the last two GridLayout arguments are the
+        //horizontal and vertical gaps between cells, and the EmptyBorder insets the whole
+        //grid from the edges of the CENTER region. Both take space away from the cells.
+        JPanel quirk_panel = new JPanel(new GridLayout(0, 2, 20, 20));
+        quirk_panel.setBorder(BorderFactory.createEmptyBorder(20, 60, 20, 60));
         JLabel quirk_name = new JLabel("Quirks", SwingConstants.CENTER);
         JButton quirk_b1 = new JButton("Savant");
         JButton quirk_b2 = new JButton("Imbecile");
@@ -348,52 +360,170 @@ public class Window extends JFrame {
     //This method builds the main game screen and types out the opening text
     public static void Game_start(Character player, JPanel window){
         JPanel gamescreen = new JPanel(new BorderLayout());
+        gamescreen.setBackground(TERMINAL_BG);
 
         JTextArea story = new JTextArea(10, 34);
         story.setEditable(false);
         story.setLineWrap(true);
         story.setWrapStyleWord(true);
-        story.setFont(new Font("Monospaced", Font.PLAIN, 14));
-        story.setBackground(Color.BLACK);
-        story.setForeground(Color.GREEN);
+        story.setFont(TERMINAL_FONT);
+        story.setBackground(TERMINAL_BG);
+        story.setForeground(TERMINAL_FG);
         story.setMargin(new Insets(8, 8, 8, 8));
-        gamescreen.add(new JScrollPane(story), BorderLayout.CENTER);
+
+        //A JScrollPane draws its own etched border and its viewport has its own background,
+        //neither of which come from the text area inside it - left alone they frame the
+        //story in a grey box that breaks the terminal look
+        JScrollPane story_scroll = new JScrollPane(story);
+        story_scroll.setBorder(BorderFactory.createEmptyBorder());
+        story_scroll.getViewport().setBackground(TERMINAL_BG);
+        gamescreen.add(story_scroll, BorderLayout.CENTER);
+
+        //The dialogue options sit in SOUTH. A BorderLayout gives SOUTH the full width but
+        //only the height its contents ask for, so the story area in CENTER keeps whatever
+        //is left - the options never squash it the way a CENTER component would.
+        //GridLayout(0, 1) stacks one full-width button per option, however many there are.
+        //The panel's own background shows through the gaps between buttons and the border
+        //around them, so it has to be black too or the options sit in a grey tray.
+        JPanel options_panel = new JPanel(new GridLayout(0, 1, 4, 4));
+        options_panel.setBackground(TERMINAL_BG);
+        options_panel.setBorder(BorderFactory.createEmptyBorder(6, 8, 8, 8));
+        gamescreen.add(options_panel, BorderLayout.SOUTH);
 
         window.add(gamescreen, BorderLayout.CENTER);
         window.revalidate();
         window.repaint();
 
-        String opening = "You wake to a impregnable darkness.";
+        String opening = "You wake to a impregnable darkness. Cloaked in an all encompassing warmth. You want to sleep but I strange groan is heard." +
+        "You try to close your eyes but the groaning grows louder.";
 
-        typeText(story, opening, 35);
+        String[] opening_options = {"Open your eyes.", "Stay still and listen.", "Call out."};
+
+        //The options are only shown once the opening has finished typing, so the player
+        //isn't offered a choice partway through a sentence.
+        typeText(story, opening, 35, () -> setOptions(options_panel, opening_options, choice -> {
+            //TODO: each choice should lead to its own scene. For now the pick is echoed
+            //back into the story so the wiring is visible end to end.
+            setOptions(options_panel, new String[0], null);
+            typeText(story, "\n\n> " + opening_options[choice] + "\n", 35);
+        }));
+    }
+
+    //Fills the dialogue panel with one button per option, replacing whatever was there
+    //before. onChoice is handed the index of the button that was pressed, so this method
+    //never needs to know anything about the story - the caller decides what happens next.
+    //Passing an empty array clears the panel.
+    public static void setOptions(JPanel panel, String[] options, IntConsumer onChoice) {
+        panel.removeAll();
+
+        for (int i = 0; i < options.length; i++) {
+            //The lambda below outlives this loop pass, and Java only lets a lambda capture
+            //a variable that never changes, so the counter is copied into a fresh local
+            int choice = i;
+            JButton option = terminalButton(options[i]);
+            option.addActionListener(e -> onChoice.accept(choice));
+            panel.add(option);
+        }
+
+        //Swing does not re-run the layout for components added after the panel is already
+        //on screen until it is told the contents changed. Without revalidate the new
+        //buttons are never given a size or position, so they simply do not appear.
+        panel.revalidate();
+        panel.repaint();
+    }
+
+    //Builds a dialogue button styled to match the story area: green monospaced text on
+    //black, in a green box.
+    public static JButton terminalButton(String text) {
+        JButton button = new JButton(text);
+        button.setFont(TERMINAL_FONT);
+        button.setForeground(TERMINAL_FG);
+        button.setBackground(TERMINAL_BG);
+
+        //setBackground alone is not enough here. The look and feel paints its own shaded
+        //button face over the whole content area, which hides the colour underneath -
+        //that is the same reason the green highlight on the quirk buttons is unreliable.
+        //Switching the content area off and marking the button opaque hands the fill back
+        //to Swing's plain background painting, which does honour setBackground.
+        button.setContentAreaFilled(false);
+        button.setOpaque(true);
+
+        //A green outline with room to breathe inside it. A compound border is how two
+        //borders are combined: the line goes on the outside, the padding on the inside.
+        button.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(TERMINAL_FG),
+                BorderFactory.createEmptyBorder(6, 10, 6, 10)));
+
+        //Without the look and feel's button face there is no pressed or hover shading left,
+        //so the colours are swapped by hand on the way in and out to keep the feedback
+        button.setFocusPainted(false);
+        button.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                button.setBackground(TERMINAL_FG);
+                button.setForeground(TERMINAL_BG);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                button.setBackground(TERMINAL_BG);
+                button.setForeground(TERMINAL_FG);
+            }
+        });
+
+        return button;
     }
 
     //Reveals text one character at a time so it reads like it is being typed out.
     //Clicking the text area skips ahead to the finished message.
     public static void typeText(JTextArea area, String text, int delayMs) {
-        //Held in an array so the listeners below can update the position as they run
+        typeText(area, text, delayMs, null);
+    }
+
+    //Same, but runs onFinished once the whole message is on screen - whether it typed all
+    //the way out or the player clicked to skip it. That is what lets the caller hold the
+    //dialogue options back until the text they belong to has actually been read out.
+    public static void typeText(JTextArea area, String text, int delayMs, Runnable onFinished) {
+        //Held in arrays so the listeners below can update them as they run
         int[] index = {0};
+        boolean[] done = {false};
         javax.swing.Timer typer = new javax.swing.Timer(delayMs, null);
+        //The skip listener has to be referenced by the code that removes it, and built by
+        //code that calls back into it, so it is parked in a one-element array to break the
+        //circle - neither half can be written before the other otherwise
+        MouseAdapter[] skipper = new MouseAdapter[1];
+
+        //Both finishing paths funnel through here, and the done flag makes it run its body
+        //only once, so onFinished can never fire twice for one message
+        Runnable finish = () -> {
+            if (done[0]) {
+                return;
+            }
+            done[0] = true;
+            typer.stop();
+            area.append(text.substring(index[0]));
+            index[0] = text.length();
+            area.removeMouseListener(skipper[0]);
+            if (onFinished != null) {
+                onFinished.run();
+            }
+        };
 
         typer.addActionListener(e -> {
             area.append(String.valueOf(text.charAt(index[0])));
             index[0]++;
             if (index[0] >= text.length()) {
-                typer.stop();
+                finish.run();
             }
         });
 
-        area.addMouseListener(new MouseAdapter() {
+        skipper[0] = new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if (typer.isRunning()) {
-                    typer.stop();
-                    area.append(text.substring(index[0]));
-                    index[0] = text.length();
-                }
-                area.removeMouseListener(this);
+                finish.run();
             }
-        });
+        };
+        area.addMouseListener(skipper[0]);
 
         typer.start();
     }
